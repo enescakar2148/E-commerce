@@ -1,6 +1,7 @@
 package com.enescakar.e_commercepreview.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,11 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.enescakar.e_commercepreview.R;
+import com.enescakar.e_commercepreview.UI.ProductDetails;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,6 +56,14 @@ public class TodaysPopularproducts extends RecyclerView.Adapter<TodaysPopularpro
                 Toast.makeText(context, "Adding Cart!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        holder.productCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ProductDetails.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -63,10 +74,12 @@ public class TodaysPopularproducts extends RecyclerView.Adapter<TodaysPopularpro
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         private ImageButton addToCart, addToFavorite;
+        private CardView productCard;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             addToCart = itemView.findViewById(R.id.addToCart);
             addToFavorite = itemView.findViewById(R.id.addToFavorite);
+            productCard = itemView.findViewById(R.id.product);
         }
     }
 }
