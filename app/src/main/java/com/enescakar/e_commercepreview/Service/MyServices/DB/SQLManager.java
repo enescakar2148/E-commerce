@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
+import com.enescakar.e_commercepreview.Model.Product;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +38,7 @@ public class SQLManager implements SQL {
     @Override
     public boolean addToCart(long productId) {
         try{
-            final String sqlCode = "INSERT INTO favorites(productId) VALUES (?)";
+            final String sqlCode = "INSERT INTO cart(productId) VALUES (?)";
             SQLiteStatement sqLiteStatement = database.compileStatement(sqlCode);
             sqLiteStatement.bindLong(1, productId);
             sqLiteStatement.execute();
@@ -49,20 +51,44 @@ public class SQLManager implements SQL {
     }
 
     @Override
-    public boolean isCart() {
-        return false;
+    public boolean isCart(long productId) {
+        try {
+            ArrayList<Long> products = this.getCart();
+
+            if (products != null) {
+                for (long product : products) {
+                    if (product == productId) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean isFavorite(long productId) {
-        ArrayList<Long> products = this.getFavorite();
+        try {
+            ArrayList<Long> products = this.getFavorite();
 
-        for (long product: products) {
-            if (product == productId){
-                return true;
+            if (products != null) {
+                for (long product : products) {
+                    if (product == productId) {
+                        System.out.println("FAVORİYE EKLENMİŞ : " + product);
+                        return true;
+                    }
+                }
+                return false;
             }
+            return false;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -73,7 +99,6 @@ public class SQLManager implements SQL {
             ArrayList<Long> products = new ArrayList<>();
             while (cursor.moveToNext()){
                 products.add(cursor.getLong(productIdIx));
-                System.out.println("PRODUCT ID: " + cursor.getLong(productIdIx));
             }
             cursor.close();
 
@@ -86,20 +111,22 @@ public class SQLManager implements SQL {
     }
 
     @Override
-    public boolean getCart() {
+    public ArrayList<Long> getCart() {
         try {
-            Cursor cursor = database.rawQuery("SELECT * FROM favorites", null);
+            Cursor cursor = database.rawQuery("SELECT * FROM cart", null);
             int productIdIx = cursor.getColumnIndex("productId");
+            ArrayList<Long> products = new ArrayList<>();
             while (cursor.moveToNext()){
-                System.out.println("Favorite: " + cursor.getString(productIdIx));
+                System.out.println("SEPET ÜRÜNLERİ : " + cursor.getLong(productIdIx));
+                products.add(cursor.getLong(productIdIx));
             }
             cursor.close();
 
-            return true;
+            return products;
 
         } catch (Exception e){
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

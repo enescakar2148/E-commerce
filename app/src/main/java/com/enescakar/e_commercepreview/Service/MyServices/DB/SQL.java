@@ -6,9 +6,9 @@ import java.util.HashMap;
 public interface SQL {
     boolean addToFavorite(long productId);
     boolean addToCart(long productId);
-    boolean isCart();
+    boolean isCart(long productId);
     boolean isFavorite(long productId);
     ArrayList<Long> getFavorite();
-    boolean getCart();
+    ArrayList<Long> getCart();
     boolean createTable(String tableName, HashMap<String, Object> fields);
 }

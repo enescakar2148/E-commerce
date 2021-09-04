@@ -39,10 +39,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ContainerActivity extends AppCompatActivity {
 
-    private final String BASE_URL = "https://fakestoreapi.com";
-    private ArrayList<Product> products;
-    private Retrofit retrofit;
-
     @SuppressLint("UseSupportActionBar")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +52,6 @@ public class ContainerActivity extends AppCompatActivity {
         }
 
         //init
-        Gson gson = new GsonBuilder().setLenient().create();
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setActionBar(toolbar);
@@ -91,30 +80,10 @@ public class ContainerActivity extends AppCompatActivity {
             }
         });
 
-        getProductsData();
     }
 
+    //Load or Set fragment
     private void getFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.containerLayout, fragment).commit();
-    }
-
-    private void getProductsData(){
-        StoreAPI storeAPI = retrofit.create(StoreAPI.class);
-
-        Call<List<Product>> call = storeAPI.getProducts();
-        call.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                products = (ArrayList<Product>) response.body();
-                for (Product product: products) {
-                    System.out.println(product.getTitle());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
     }
 }

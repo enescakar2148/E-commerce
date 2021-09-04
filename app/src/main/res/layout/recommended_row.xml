@@ -17,79 +17,86 @@
         app:cardUseCompatPadding="true">
 
         <LinearLayout
-            android:id="@+id/productMainCart"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:orientation="vertical"
-            android:background="@drawable/test_product">
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Buttons Layout -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="#80000000">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="right"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp">
 
-                <!-- Buttons Layout -->
-                <LinearLayout
-                    android:layout_width="match_parent"
+
+                <ImageButton
+                    android:id="@+id/addToCart"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="right"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="15dp">
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_add_cart" />
 
+                <ImageButton
+                    android:id="@+id/addToFavorite"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_favorite_ligth" />
 
-                    <ImageButton
-                        android:id="@+id/addToCart"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_add_cart"
-                        android:background="@android:color/transparent"/>
+            </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/addToFavorite"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_favorite_ligth"
-                        android:background="@android:color/transparent"/>
+            <ImageView
+                android:id="@+id/productImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/test_product"
+                />
 
-                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
 
                 <!-- Text -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:gravity="bottom"
+                    android:orientation="vertical"
                     android:padding="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Product Name"
-                        android:textColor="#fff"
-                        android:textStyle="bold"
-                        android:textSize="18sp"/>
+                        android:textColor="#000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
                         android:text="Product Annotation Preview"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="14sp"
-                        android:layout_marginTop="3dp"/>
+                        android:textColor="#E6000000"
+                        android:textSize="14sp" />
 
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="$10.00"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="14sp"
                         android:layout_marginTop="3dp"
-                        android:textAlignment="textEnd"/>
+                        android:text="$10.00"
+                        android:textAlignment="textEnd"
+                        android:textColor="#E6000000"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
