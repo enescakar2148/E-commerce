@@ -72,7 +72,7 @@ public class ContainerActivity extends AppCompatActivity {
                         getFragment(new FavoriteFragment());
                         return true;
                     case R.id.cart:
-                        getFragment(new CartFragment());
+                        getFragment(new CartFragment(ContainerActivity.this));
                         return true;
                     default:
                         return false;
