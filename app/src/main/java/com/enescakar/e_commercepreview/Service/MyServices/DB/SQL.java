@@ -11,4 +11,6 @@ public interface SQL {
     ArrayList<Long> getFavorite();
     ArrayList<Long> getCart();
     boolean createTable(String tableName, HashMap<String, Object> fields);
+    boolean removeProductFromCart(long productId);
+    boolean removeProductFromFavorite(long productId);
 }

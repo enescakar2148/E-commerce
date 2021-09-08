@@ -17,6 +17,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.enescakar.e_commercepreview.Fragments.CartFragment;
 import com.enescakar.e_commercepreview.Model.Product;
 import com.enescakar.e_commercepreview.R;
 import com.enescakar.e_commercepreview.Service.MyServices.DB.SQLManager;
@@ -40,11 +41,11 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
 
         //Veritabanı Eğer yok ise oluşturur. Eğer var ise açar
         //Mode_Private => Bizim veritabanımız sadece bizim uygulamamız üzerinden ulaşılabilir olsun
-        //sqLiteDatabase = context.openOrCreateDatabase("Shopping", Context.MODE_PRIVATE, null);
+        sqLiteDatabase = context.openOrCreateDatabase("Shopping", Context.MODE_PRIVATE, null);
 
         //Kendi Veritabanı Yöneticimizi oluşturur.
         //Bir tane Context ve Açılmış/Oluşturulmuş bir veritbanı alır.
-        //sqlManager = new SQLManager(context, sqLiteDatabase);
+        sqlManager = new SQLManager(context, sqLiteDatabase);
 
     }
 
@@ -65,6 +66,19 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
             holder.productPrice.setText("$" + products.get(position).getPrice());
 
             holder.productName.setText(products.get(position).getTitle());
+
+            holder.removeProduct.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onClick(View v) {
+                    boolean isSucceded = sqlManager.removeProductFromCart(products.get(position).getProductId());
+                    if (isSucceded){
+                        products.remove(position);
+                        Toast.makeText(context, "Ürün Sepetten Silindi", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
+                    }
+                }
+            });
         }
     }
 
@@ -83,7 +97,7 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
         private TextView productName, productPrice;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            productImage= (ImageView) itemView.findViewById(R.id.cart_productImage);
+            productImage= itemView.findViewById(R.id.cart_productImage);
             productName = itemView.findViewById(R.id.cart_ProductName);
             productPrice = itemView.findViewById(R.id.cart_ProductPrice);
             removeProduct = itemView.findViewById(R.id.cart_RomoveProduct);

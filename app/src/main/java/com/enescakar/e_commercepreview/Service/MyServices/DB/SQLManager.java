@@ -78,7 +78,6 @@ public class SQLManager implements SQL {
             if (products != null) {
                 for (long product : products) {
                     if (product == productId) {
-                        System.out.println("FAVORİYE EKLENMİŞ : " + product);
                         return true;
                     }
                 }
@@ -147,4 +146,24 @@ public class SQLManager implements SQL {
             return false;
         }
     }
+
+    @Override
+    public boolean removeProductFromCart(long productId) {
+        try {
+            final String sql = "DELETE FROM cart WHERE productId = (?)";
+            SQLiteStatement sqLiteStatement = database.compileStatement(sql);
+            sqLiteStatement.bindLong(1,productId);
+            sqLiteStatement.execute();
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean removeProductFromFavorite(long productId) {
+        return false;
+    }
+
 }
