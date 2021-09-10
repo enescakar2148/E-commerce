@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,10 +55,14 @@ public class TodaysPopularproducts extends RecyclerView.Adapter<TodaysPopularpro
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull @NotNull TodaysPopularproducts.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         //Download Product Image
         Glide.with(context).load(products.get(position).getImage()).into(holder.productImage);
+
+        holder.productName.setText(products.get(position).getTitle());
+        holder.productPrice.setText("$"+products.get(position).getPrice());
 
         //Uygulama yüklenip ürünler ekrana gösterilir gösterilmez
         //ürünlerin Favoriye ve Sepete eklenip eklenmediği sorgulanır
@@ -180,12 +185,17 @@ public class TodaysPopularproducts extends RecyclerView.Adapter<TodaysPopularpro
         private final ImageButton addToFavorite;
         private final CardView productCard;
         private final ImageView productImage;
+
+        private final TextView productName;
+        private final TextView productPrice;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             productImage = itemView.findViewById(R.id.productImage);
             addToCart = itemView.findViewById(R.id.addToCart);
             addToFavorite = itemView.findViewById(R.id.addToFavorite);
             productCard = itemView.findViewById(R.id.product);
+            productName = itemView.findViewById(R.id.recommendedProductNameText);
+            productPrice = itemView.findViewById(R.id.recommendedProductPriceText);
         }
     }
 

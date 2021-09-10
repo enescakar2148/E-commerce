@@ -163,7 +163,16 @@ public class SQLManager implements SQL {
 
     @Override
     public boolean removeProductFromFavorite(long productId) {
-        return false;
+        try {
+            final String sql = "DELETE FROM favorites WHERE productId = (?)";
+            SQLiteStatement sqLiteStatement = database.compileStatement(sql);
+            sqLiteStatement.bindLong(1,productId);
+            sqLiteStatement.execute();
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

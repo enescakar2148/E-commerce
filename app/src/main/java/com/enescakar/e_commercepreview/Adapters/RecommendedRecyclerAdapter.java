@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,10 +29,9 @@ import java.util.HashMap;
 
 public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<RecommendedRecyclerAdapter.ViewHolder> {
 
-    private Context context;
-    private SQLManager sqlManager;
-    private SQLiteDatabase sqLiteDatabase;
-    private ArrayList<Product> products;
+    private final Context context;
+    private final SQLManager sqlManager;
+    private final ArrayList<Product> products;
 
     public RecommendedRecyclerAdapter(Context context, ArrayList<Product> products) {
         this.context = context;
@@ -39,7 +39,7 @@ public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<Recommended
 
         //Veritabanı Eğer yok ise oluşturur. Eğer var ise açar
         //Mode_Private => Bizim veritabanımız sadece bizim uygulamamız üzerinden ulaşılabilir olsun
-        sqLiteDatabase = context.openOrCreateDatabase("Shopping", Context.MODE_PRIVATE, null);
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("Shopping", Context.MODE_PRIVATE, null);
 
         //Kendi Veritabanı Yöneticimizi oluşturur.
         //Bir tane Context ve Açılmış/Oluşturulmuş bir veritbanı alır.
@@ -55,10 +55,14 @@ public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<Recommended
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull @NotNull RecommendedRecyclerAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         //Download Product Image
         Glide.with(context).load(products.get(position).getImage()).into(holder.productImage);
+
+        holder.productName.setText(products.get(position).getTitle());
+        holder.productPrice.setText("$"+products.get(position).getPrice());
 
         //Uygulama yüklenip ürünler ekrana gösterilir gösterilmez
         //ürünlerin Favoriye ve Sepete eklenip eklenmediği sorgulanır
@@ -109,8 +113,6 @@ public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<Recommended
                     isFavorite(sqlManager, holder, position);
                     //mesaj
                     Toast.makeText(context, "Add To Favorite", Toast.LENGTH_SHORT).show();
-                }else {
-                    //DELETE from Favorite
                 }
             }
         });
@@ -158,8 +160,6 @@ public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<Recommended
                     isCart(sqlManager, holder, position);
                     //mesaj
                     Toast.makeText(context, "Add To Cart", Toast.LENGTH_SHORT).show();
-                }else {
-                    //DELETE from Cart
                 }
             }
         });
@@ -169,6 +169,7 @@ public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<Recommended
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ProductDetails.class);
+                intent.putExtra("productId", products.get(position).getProductId());
                 context.startActivity(intent);
             }
         });
@@ -179,21 +180,27 @@ public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<Recommended
         return products.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageButton addToCart, addToFavorite;
-        private CardView productCard;
-        private ImageView productImage;
+        private final ImageButton addToCart;
+        private final ImageButton addToFavorite;
+        private final CardView productCard;
+        private final ImageView productImage;
+        private final TextView productName;
+        private final TextView productPrice;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            productImage= (ImageView) itemView.findViewById(R.id.productImage);
+            productImage= itemView.findViewById(R.id.productImage);
             addToCart = itemView.findViewById(R.id.addToCart);
             addToFavorite = itemView.findViewById(R.id.addToFavorite);
             productCard = itemView.findViewById(R.id.product);
+            productName = itemView.findViewById(R.id.recommendedProductNameText);
+            productPrice = itemView.findViewById(R.id.recommendedProductPriceText);
         }
     }
 
     //ürün sepete eklenmiş mi
+    @SuppressLint("UseCompatLoadingForDrawables")
     private boolean isCart(SQLManager sqlManager, ViewHolder holder, int position) {
         //Ürünü veritabanında sorgulamak için ürün ID'sini değiştirilemez şekilde oluşturulması
         final long productId = products.get(position).getProductId();
@@ -213,7 +220,8 @@ public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<Recommended
     }
 
     //ürün favoriye eklenmiş mi
-    private boolean isFavorite(SQLManager sqlManager, ViewHolder holder,int position){
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private boolean isFavorite(SQLManager sqlManager, ViewHolder holder, int position){
         //Ürünü veritabanında sorgulamak için ürün ID'sini değiştirilemez şekilde oluşturulması
         final long productId = products.get(position).getProductId();
 

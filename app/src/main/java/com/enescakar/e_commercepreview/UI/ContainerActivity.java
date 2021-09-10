@@ -69,7 +69,7 @@ public class ContainerActivity extends AppCompatActivity {
                         getFragment(new HomeFragment(ContainerActivity.this));
                         return true;
                     case R.id.favorite:
-                        getFragment(new FavoriteFragment());
+                        getFragment(new FavoriteFragment(ContainerActivity.this));
                         return true;
                     case R.id.cart:
                         getFragment(new CartFragment(ContainerActivity.this));
