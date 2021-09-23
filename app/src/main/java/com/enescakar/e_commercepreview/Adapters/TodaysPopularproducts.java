@@ -169,6 +169,12 @@ public class TodaysPopularproducts extends RecyclerView.Adapter<TodaysPopularpro
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ProductDetails.class);
+                intent.putExtra("productId", products.get(position).getProductId());
+                intent.putExtra("productName", products.get(position).getTitle());
+                intent.putExtra("productDescription", products.get(position).getDescription());
+                intent.putExtra("productPrice", products.get(position).getPrice());
+                intent.putExtra("productImage", products.get(position).getImage());
+                intent.putExtra("productCategory", products.get(position).getCategory());
                 context.startActivity(intent);
             }
         });
