@@ -23,4 +23,9 @@ public interface StoreAPI {
     @GET("/products?limit=3&sort=desc")
     Call<List<Product>> getTodayProduct();
 
+    @GET("/products/categories")
+    Call<List> getAllCategories();
+
+    @GET("/products/category/{category}")
+    Call<List> getInCategory(@Path("category") String category);
 }
