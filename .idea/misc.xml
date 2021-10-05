@@ -7,8 +7,10 @@
         <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/drawable-anydpi/ic_favorite_ligth.xml" value="0.2484375" />
         <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/layout/activity_container.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/layout/activity_product_details.xml" value="0.275" />
+        <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/layout/activity_selected_category.xml" value="0.1" />
         <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/layout/cart_row.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/layout/categories_row.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/layout/category_row.xml" value="0.275" />
         <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/layout/favorite_row.xml" value="0.275" />
         <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/layout/fragment_cart.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/e52ne/AndroidStudioProjects/EcommercePreview/app/src/main/res/layout/fragment_favorite.xml" value="0.275" />

@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcommercePreview">
         <activity
+            android:name=".UI.SelectedCategory"
+            android:exported="true" />
+        <activity
             android:name=".UI.ProductDetails"
             android:exported="true" />
         <activity android:name=".UI.ContainerActivity" />

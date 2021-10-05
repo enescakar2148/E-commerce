@@ -27,5 +27,5 @@ public interface StoreAPI {
     Call<List> getAllCategories();
 
     @GET("/products/category/{category}")
-    Call<List> getInCategory(@Path("category") String category);
+    Call<List<Product>> getInCategory(@Path("category") String category);
 }

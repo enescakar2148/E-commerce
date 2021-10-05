@@ -1,6 +1,8 @@
 package com.enescakar.e_commercepreview.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.enescakar.e_commercepreview.R;
+import com.enescakar.e_commercepreview.UI.SelectedCategory;
 
 import java.util.ArrayList;
 
@@ -31,8 +34,17 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Holder holder, int position) {
+    public void onBindViewHolder(@NonNull Holder holder, @SuppressLint("RecyclerView") int position) {
         holder.textView.setText(categories.get(position));
+
+        holder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SelectedCategory.class);
+                intent.putExtra("category", categories.get(position));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
