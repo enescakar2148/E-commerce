@@ -44,7 +44,9 @@ public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<Recommended
         //Kendi Veritabanı Yöneticimizi oluşturur.
         //Bir tane Context ve Açılmış/Oluşturulmuş bir veritbanı alır.
         sqlManager = new SQLManager(context, sqLiteDatabase);
-
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("productId", "long");
+        sqlManager.createTable("favorites",map);
     }
 
     @NonNull

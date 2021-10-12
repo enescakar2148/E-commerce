@@ -176,4 +176,40 @@ public class SQLManager implements SQL {
         }
     }
 
+    @Override
+    public boolean saveFirstProductData(Product firstProductData) {
+        try{
+            final String SQL = "INSERT INTO firstProducts(id, title, price, description, category, image) VALUES(?, ?, ?, ?, ?, ?)";
+            SQLiteStatement sqLiteStatement = database.compileStatement(SQL);
+            sqLiteStatement.bindLong(1, firstProductData.getProductId());
+            sqLiteStatement.bindString(2, firstProductData.getTitle());
+            sqLiteStatement.bindString(3, String.valueOf(firstProductData.getPrice()));
+            sqLiteStatement.bindString(4, firstProductData.getDescription());
+            sqLiteStatement.bindString(5, firstProductData.getCategory());
+            sqLiteStatement.bindString(6, firstProductData.getImage());
+            sqLiteStatement.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public int getFirstProductSize() {
+        try {
+            Cursor cursor = database.rawQuery("SELECT * FROM firstProducts", null);
+            int productIdX = cursor.getColumnIndex("productId");
+            ArrayList<Long> productIds = new ArrayList<>();
+            while (cursor.moveToNext()){
+                productIds.add(cursor.getLong(productIdX));
+            }
+            cursor.close();
+            return productIds.size();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }
