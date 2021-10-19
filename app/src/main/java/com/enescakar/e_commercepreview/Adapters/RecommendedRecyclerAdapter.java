@@ -184,7 +184,7 @@ public class RecommendedRecyclerAdapter extends RecyclerView.Adapter<Recommended
 
     @Override
     public int getItemCount() {
-        return products.size();
+        return 5;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

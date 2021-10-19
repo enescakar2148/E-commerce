@@ -25,6 +25,8 @@ import com.enescakar.e_commercepreview.UI.ProductDetails;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class TodaysPopularproducts extends RecyclerView.Adapter<TodaysPopularproducts.ViewHolder> {
@@ -58,6 +60,8 @@ public class TodaysPopularproducts extends RecyclerView.Adapter<TodaysPopularpro
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull @NotNull TodaysPopularproducts.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        //Reverse ArrayList
+        Collections.reverse(products);
         //Download Product Image
         Glide.with(context).load(products.get(position).getImage()).into(holder.productImage);
 
@@ -182,7 +186,7 @@ public class TodaysPopularproducts extends RecyclerView.Adapter<TodaysPopularpro
 
     @Override
     public int getItemCount() {
-        return products.size();
+        return 5;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

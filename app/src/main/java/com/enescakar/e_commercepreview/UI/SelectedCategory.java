@@ -1,5 +1,6 @@
 package com.enescakar.e_commercepreview.UI;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +46,26 @@ public class SelectedCategory extends AppCompatActivity {
                 .build();
 
         StoreAPI storeAPI = retrofit.create(StoreAPI.class);
+
+        //Category = All
+        //Get All Products
+        if (category.matches("all")){
+            Call<List<Product>> categoryProducts = storeAPI.getProducts();
+            categoryProducts.enqueue(new Callback<List<Product>>() {
+                @Override
+                public void onResponse(@NonNull Call<List<Product>> call, Response<List<Product>> response) {
+                    if (response.isSuccessful()){
+                        ArrayList<Product> products = (ArrayList<Product>) response.body();
+                        RecyclerManager.bind(recyclerView, new CategoryRowAdapter(SelectedCategory.this, products), new GridLayoutManager(SelectedCategory.this, 2));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Product>> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        }
 
         Call<List<Product>> categoryProducts = storeAPI.getInCategory(category);
         categoryProducts.enqueue(new Callback<List<Product>>() {

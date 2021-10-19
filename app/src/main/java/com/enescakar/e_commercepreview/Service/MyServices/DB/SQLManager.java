@@ -212,4 +212,35 @@ public class SQLManager implements SQL {
         return 0;
     }
 
+    @Override
+    public ArrayList<Product> getProductsFromDB() {
+        try{
+            Cursor cursor = database.rawQuery("SELECT * FROM firstProducts", null);
+            int productIdX = cursor.getColumnIndex("id");
+            int productTitleX = cursor.getColumnIndex("title");
+            int priceX = cursor.getColumnIndex("price");
+            int productDescriptionX = cursor.getColumnIndex("description");
+            int productCategoryX = cursor.getColumnIndex("category");
+            int productImageX = cursor.getColumnIndex("image");
+            ArrayList<Product> products = new ArrayList<>();
+            Product product;
+
+            while (cursor.moveToNext()){
+                product = new Product();
+                product.setProductId(cursor.getLong(productIdX));
+                product.setCategory(cursor.getString(productCategoryX));
+                product.setDescription(cursor.getString(productDescriptionX));
+                product.setPrice(cursor.getLong(priceX));
+                product.setImage(cursor.getString(productImageX));
+                product.setTitle(cursor.getString(productTitleX));
+                products.add(product);
+            }
+            cursor.close();
+            return products;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

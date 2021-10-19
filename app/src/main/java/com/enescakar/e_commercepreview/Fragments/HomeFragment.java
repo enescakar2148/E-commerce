@@ -39,31 +39,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends Fragment {
 
-    private RecyclerView recommended, todaysPopulerProducts;
-    private Context context;
+    private final Context context;
 
-    private ArrayList<Product> products, todaysProduct;
-    private final String BASE_URL = "https://fakestoreapi.com";
-    private Retrofit retrofit;
+    private final ArrayList<Product> products;
 
-    public HomeFragment(Context context) {
+    public HomeFragment(Context context, ArrayList<Product> products, ArrayList<Product> todaysProduct) {
         this.context = context;
+        this.products = products;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        Gson gson = new GsonBuilder().setLenient().create();
-
-        //Retrofit Created
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                //JSON'u Parse etmesi için gerekli parser
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
     }
 
     @Override
@@ -77,60 +64,15 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recommended = view.findViewById(R.id.recommentedRecycler);
-        todaysPopulerProducts = view.findViewById(R.id.todaysPopularProductsRecycler);
+        RecyclerView recommended = view.findViewById(R.id.recommentedRecycler);
+        RecyclerView todaysPopulerProducts = view.findViewById(R.id.todaysPopularProductsRecycler);
 
-        //Create Service
-        StoreAPI storeAPI = retrofit.create(StoreAPI.class);
+        setRecyclerView(recommended, new RecommendedRecyclerAdapter(context, products));
+        setRecyclerView(todaysPopulerProducts, new TodaysPopularproducts(context, products));
 
-        //API'ya istek atmak için servisten methodu çağır
-        Call<List<Product>> call = storeAPI.getProductForLimit();
-
-        //Asenkton şekilde API'ya isteği at ve cevabı al
-        call.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                //Cevap gerçekten başarılı ise
-                if (response.isSuccessful()){
-                    products = (ArrayList<Product>) response.body();
-                    setRecyclerView(recommended, new RecommendedRecyclerAdapter(context, products));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                //Herhangi bir hata meydana geldi ise
-                t.printStackTrace();
-            }
-        });
-
-        //TodaysProduct
-        //Create Service
-
-        //API'ya istek atmak için servisten methodu çağır
-        Call<List<Product>> todaysProductCall = storeAPI.getTodayProduct();
-
-        //Asenkton şekilde API'ya isteği at ve cevabı al
-        todaysProductCall.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                //Cevap gerçekten başarılı ise
-                if (response.isSuccessful()){
-                    todaysProduct = (ArrayList<Product>) response.body();
-                    setRecyclerView(todaysPopulerProducts, new TodaysPopularproducts(context, todaysProduct));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                //Herhangi bir hata meydana geldi ise
-                t.printStackTrace();
-            }
-        });
     }
 
     private void setRecyclerView(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
         RecyclerManager.bind(recyclerView, adapter,new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-
     }
 }

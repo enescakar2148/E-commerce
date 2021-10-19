@@ -1,5 +1,6 @@
 package com.enescakar.e_commercepreview;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -67,10 +68,11 @@ public class SplashScreen extends AppCompatActivity {
 
         call.enqueue(new Callback<List<Product>>() {
             @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+            public void onResponse(@NonNull Call<List<Product>> call, @NonNull Response<List<Product>> response) {
                 if (response.isSuccessful()){
                     products = (ArrayList<Product>) response.body();
                     int savedProductSize = sqlManager.getFirstProductSize();
+                    assert response.body() != null;
                     if (savedProductSize != response.body().size() && savedProductSize < response.body().size()){
                         for (Product product: products) {
                             if (sqlManager.saveFirstProductData(product)){

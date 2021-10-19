@@ -17,4 +17,5 @@ public interface SQL {
     boolean removeProductFromFavorite(long productId);
     boolean saveFirstProductData(Product firstProductData);
     int getFirstProductSize();
+    ArrayList<Product> getProductsFromDB();
 }

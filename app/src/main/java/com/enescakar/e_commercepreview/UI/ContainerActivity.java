@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.enescakar.e_commercepreview.Fragments.FavoriteFragment;
 import com.enescakar.e_commercepreview.Fragments.HomeFragment;
 import com.enescakar.e_commercepreview.Model.Product;
 import com.enescakar.e_commercepreview.R;
+import com.enescakar.e_commercepreview.Service.MyServices.DB.SQLManager;
 import com.enescakar.e_commercepreview.Service.MyServices.RecyclerManager;
 import com.enescakar.e_commercepreview.Service.RetrofitService.StoreAPI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,13 +54,19 @@ public class ContainerActivity extends AppCompatActivity {
         //Hide Status Bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        SQLiteDatabase sqLiteDatabase = this.openOrCreateDatabase("Shopping", MODE_PRIVATE, null);
+        SQLManager sqlManager = new SQLManager(this, sqLiteDatabase);
+        ArrayList<Product> products = getSavedProductsFromDB(sqlManager);
+
         setContentView(R.layout.activity_container);
         if (savedInstanceState == null){
-            getFragment(new HomeFragment(this));
+            getFragment(new HomeFragment(this, products, products));
         }
 
         //init
         categories = new ArrayList<>();
+        categories.add("all");
         categories.add("electronics");
         categories.add("jewelery");
         categories.add("men's clothing");
@@ -82,7 +90,7 @@ public class ContainerActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull @org.jetbrains.annotations.NotNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.home:
-                        getFragment(new HomeFragment(ContainerActivity.this));
+                        getFragment(new HomeFragment(ContainerActivity.this, products, products));
                         return true;
                     case R.id.favorite:
                         getFragment(new FavoriteFragment(ContainerActivity.this));
@@ -101,5 +109,10 @@ public class ContainerActivity extends AppCompatActivity {
     //Load or Set fragment
     private void getFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.containerLayout, fragment).commit();
+    }
+
+
+    private ArrayList<Product> getSavedProductsFromDB(SQLManager sqlManager){
+        return sqlManager.getProductsFromDB();
     }
 }
