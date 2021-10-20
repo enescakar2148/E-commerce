@@ -46,7 +46,6 @@ public class SelectedCategory extends AppCompatActivity {
                 .build();
 
         StoreAPI storeAPI = retrofit.create(StoreAPI.class);
-
         //Category = All
         //Get All Products
         if (category.matches("all")){
@@ -66,7 +65,7 @@ public class SelectedCategory extends AppCompatActivity {
                 }
             });
         }
-
+        //Get In Categories
         Call<List<Product>> categoryProducts = storeAPI.getInCategory(category);
         categoryProducts.enqueue(new Callback<List<Product>>() {
             @Override

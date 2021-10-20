@@ -57,7 +57,7 @@ public class SplashScreen extends AppCompatActivity {
 
 
         SQLiteDatabase sqLiteDatabase = this.openOrCreateDatabase("Shopping", MODE_PRIVATE, null);
-        SQLManager sqlManager = new SQLManager(this, sqLiteDatabase);
+        SQLManager sqlManager = new SQLManager(sqLiteDatabase);
         try {
             sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS firstProducts (id LONG, title VARCHAR, price LONG, description VARCHAR, category VARCHAR, image VARCHAR)");
         } catch (Exception e) {

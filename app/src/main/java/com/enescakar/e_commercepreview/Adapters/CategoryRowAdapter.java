@@ -28,8 +28,8 @@ import java.util.HashMap;
 
 public class CategoryRowAdapter extends RecyclerView.Adapter<CategoryRowAdapter.Holder> {
 
-    private Context context;
-    private ArrayList<Product> products;
+    private final Context context;
+    private final ArrayList<Product> products;
     private final SQLManager sqlManager;
     public CategoryRowAdapter(Context context, ArrayList<Product> products) {
         this.context = context;
@@ -40,7 +40,7 @@ public class CategoryRowAdapter extends RecyclerView.Adapter<CategoryRowAdapter.
 
         //Kendi Veritabanı Yöneticimizi oluşturur.
         //Bir tane Context ve Açılmış/Oluşturulmuş bir veritbanı alır.
-        sqlManager = new SQLManager(context, sqLiteDatabase);
+        sqlManager = new SQLManager(sqLiteDatabase);
 
     }
 
@@ -51,6 +51,7 @@ public class CategoryRowAdapter extends RecyclerView.Adapter<CategoryRowAdapter.
         return new Holder(v);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CategoryRowAdapter.Holder holder, @SuppressLint("RecyclerView") int position) {
 //Download Product Image
@@ -180,7 +181,7 @@ public class CategoryRowAdapter extends RecyclerView.Adapter<CategoryRowAdapter.
         return products.size();
     }
 
-    class Holder extends RecyclerView.ViewHolder{
+    static class Holder extends RecyclerView.ViewHolder{
         private final ImageButton addToCart;
         private final ImageButton addToFavorite;
         private final CardView productCard;

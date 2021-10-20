@@ -54,7 +54,7 @@ public class FavoriteFragment extends Fragment {
 
         SQLiteDatabase sqliteDatabase = context.openOrCreateDatabase("Shopping", Context.MODE_PRIVATE, null);
 
-        sqlManager = new SQLManager(context, sqliteDatabase);
+        sqlManager = new SQLManager(sqliteDatabase);
     }
 
     @Override
@@ -120,8 +120,8 @@ public class FavoriteFragment extends Fragment {
             getProduct.enqueue(new Callback<Product>() {
                 @Override
                 public void onResponse(@NonNull Call<Product> call, @NonNull Response<Product> response) {
-                    products.add(response.body());
                     assert response.body() != null;
+                    products.add(response.body());
                     price = price+ (long) response.body().getPrice();
                 }
 

@@ -12,41 +12,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SQLManager implements SQL {
-    private Context context;
-    private SQLiteDatabase database;
+    private final SQLiteDatabase database;
 
-    public SQLManager(Context context, SQLiteDatabase database) {
-        this.context = context;
+    public SQLManager(SQLiteDatabase database) {
         this.database = database;
     }
 
     @Override
-    public boolean addToFavorite(long productId) {
+    public void addToFavorite(long productId) {
         try{
             final String sqlCode = "INSERT INTO favorites(productId) VALUES (?)";
             SQLiteStatement sqLiteStatement = database.compileStatement(sqlCode);
             sqLiteStatement.bindLong(1, productId);
             sqLiteStatement.execute();
-            return true;
 
         } catch (Exception e){
             e.printStackTrace();
-            return false;
         }
     }
 
     @Override
-    public boolean addToCart(long productId) {
+    public void addToCart(long productId) {
         try{
             final String sqlCode = "INSERT INTO cart(productId) VALUES (?)";
             SQLiteStatement sqLiteStatement = database.compileStatement(sqlCode);
             sqLiteStatement.bindLong(1, productId);
             sqLiteStatement.execute();
-            return true;
 
         } catch (Exception e){
             e.printStackTrace();
-            return false;
         }
     }
 
@@ -130,20 +124,17 @@ public class SQLManager implements SQL {
     }
 
     @Override
-    public boolean createTable(String tableName, HashMap<String, Object> fields) {
-        HashMap<String, Object> data =fields;
+    public void createTable(String tableName, HashMap<String, Object> fields) {
         String key = "";
         String value = "";
-        for(Map.Entry<String, Object> entry : data.entrySet()) {
+        for(Map.Entry<String, Object> entry : fields.entrySet()) {
             key = entry.getKey();
             value = (String) entry.getValue();
         }
         try{
             database.execSQL("CREATE TABLE IF NOT EXISTS "+ tableName+ "("+key+" "+value.toUpperCase()+")");
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
     }
 

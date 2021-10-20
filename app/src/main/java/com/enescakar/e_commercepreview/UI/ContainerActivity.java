@@ -10,10 +10,8 @@ import android.annotation.SuppressLint;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.enescakar.e_commercepreview.Adapters.CategoriesAdapter;
@@ -24,29 +22,18 @@ import com.enescakar.e_commercepreview.Model.Product;
 import com.enescakar.e_commercepreview.R;
 import com.enescakar.e_commercepreview.Service.MyServices.DB.SQLManager;
 import com.enescakar.e_commercepreview.Service.MyServices.RecyclerManager;
-import com.enescakar.e_commercepreview.Service.RetrofitService.StoreAPI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ContainerActivity extends AppCompatActivity {
 
     private ArrayList<String> categories;
-    private RecyclerView categoryCeycler;
+
     @SuppressLint("UseSupportActionBar")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +43,7 @@ public class ContainerActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         SQLiteDatabase sqLiteDatabase = this.openOrCreateDatabase("Shopping", MODE_PRIVATE, null);
-        SQLManager sqlManager = new SQLManager(this, sqLiteDatabase);
+        SQLManager sqlManager = new SQLManager(sqLiteDatabase);
         ArrayList<Product> products = getSavedProductsFromDB(sqlManager);
 
         setContentView(R.layout.activity_container);
@@ -72,7 +59,7 @@ public class ContainerActivity extends AppCompatActivity {
         categories.add("men's clothing");
         categories.add("women's clothing");
 
-        categoryCeycler = findViewById(R.id.categoriesRecyclerView);
+        RecyclerView categoryCeycler = findViewById(R.id.categoriesRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         RecyclerManager.bind(categoryCeycler, new CategoriesAdapter(categories, this), layoutManager);
 

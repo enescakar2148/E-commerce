@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface SQL {
-    boolean addToFavorite(long productId);
-    boolean addToCart(long productId);
+    void addToFavorite(long productId);
+    void addToCart(long productId);
     boolean isCart(long productId);
     boolean isFavorite(long productId);
     ArrayList<Long> getFavorite();
     ArrayList<Long> getCart();
-    boolean createTable(String tableName, HashMap<String, Object> fields);
+    void createTable(String tableName, HashMap<String, Object> fields);
     boolean removeProductFromCart(long productId);
     boolean removeProductFromFavorite(long productId);
     boolean saveFirstProductData(Product firstProductData);

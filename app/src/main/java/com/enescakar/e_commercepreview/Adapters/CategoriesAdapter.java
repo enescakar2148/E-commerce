@@ -41,8 +41,10 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SelectedCategory.class);
+
+                //Seçilen kategoriyi, Kategorilerin listeleneceği sayfaya parametre olarak gönderir
                 intent.putExtra("category", categories.get(position));
-                context.startActivity(intent);
+                context.startActivity(intent); //Sayfa Başlatılır
             }
         });
     }
@@ -52,8 +54,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ho
         return categories.size();
     }
 
-    class Holder extends RecyclerView.ViewHolder{
-        private TextView textView;
+    static class Holder extends RecyclerView.ViewHolder{
+        private final TextView textView;
         public Holder(@NonNull View itemView) {
             super(itemView);
              textView= itemView.findViewById(R.id.categoryText);

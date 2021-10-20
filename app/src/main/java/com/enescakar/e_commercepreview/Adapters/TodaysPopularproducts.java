@@ -45,7 +45,7 @@ public class TodaysPopularproducts extends RecyclerView.Adapter<TodaysPopularpro
 
         //Kendi Veritabanı Yöneticimizi oluşturur.
         //Bir tane Context ve Açılmış/Oluşturulmuş bir veritbanı alır.
-        sqlManager = new SQLManager(context, sqLiteDatabase);
+        sqlManager = new SQLManager(sqLiteDatabase);
 
     }
 

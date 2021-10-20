@@ -7,20 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.enescakar.e_commercepreview.Model.Product;
 import com.enescakar.e_commercepreview.R;
-import com.enescakar.e_commercepreview.Service.RetrofitService.StoreAPI;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProductDetails extends AppCompatActivity {
 
@@ -38,9 +27,6 @@ public class ProductDetails extends AppCompatActivity {
         double productPrice = getDatas.getDoubleExtra("productPrice", 0);
         String productImage = getDatas.getStringExtra("productImage");
         String productCategory = getDatas.getStringExtra("productCategory");
-
-        System.out.println(productId + "\n" + productName + "\n" + productDescription
-        + "\n" + productPrice + "\n" + productImage + "\n" + productCategory);
 
         final TextView productNameText = findViewById(R.id.ProductNane);
         final TextView productPriceText = findViewById(R.id.ProductPrice);

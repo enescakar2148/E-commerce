@@ -25,10 +25,9 @@ import java.util.ArrayList;
 
 public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecyclerAdapter.ViewHolder> {
 
-    private Context context;
-    private SQLManager sqlManager;
-    private SQLiteDatabase sqLiteDatabase;
-    private ArrayList<Product> products;
+    private final Context context;
+    private final SQLManager sqlManager;
+    private final ArrayList<Product> products;
 
     public FavoriteRecyclerAdapter(Context context, ArrayList<Product> products) {
         this.context = context;
@@ -36,11 +35,11 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
 
         //Veritabanı Eğer yok ise oluşturur. Eğer var ise açar
         //Mode_Private => Bizim veritabanımız sadece bizim uygulamamız üzerinden ulaşılabilir olsun
-        sqLiteDatabase = context.openOrCreateDatabase("Shopping", Context.MODE_PRIVATE, null);
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("Shopping", Context.MODE_PRIVATE, null);
 
         //Kendi Veritabanı Yöneticimizi oluşturur.
         //Bir tane Context ve Açılmış/Oluşturulmuş bir veritbanı alır.
-        sqlManager = new SQLManager(context, sqLiteDatabase);
+        sqlManager = new SQLManager(sqLiteDatabase);
 
     }
 
@@ -52,6 +51,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull @NotNull FavoriteRecyclerAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         //Download Product Image
@@ -66,11 +66,14 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onClick(View v) {
+                    //Ürün favorilerden silinir ve geriye başarılı olup olmaması durumuna göre boolean döner
                     boolean isSucceded = sqlManager.removeProductFromFavorite(products.get(position).getProductId());
+
+                    //Eğer başarılı ise artık favori listesinden Item Silinir
                     if (isSucceded){
                         products.remove(position);
                         Toast.makeText(context, "Ürün Favorilerden Kaldırıldı", Toast.LENGTH_SHORT).show();
-                        notifyDataSetChanged();
+                        notifyDataSetChanged(); //Adaptöre verilerin değiştiğini ve kendini güncellemesi gerektiğini söyler
                     }
                 }
             });
@@ -85,11 +88,11 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         return 0;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-
-        private ImageButton removeProduct;
-        private ImageView productImage;
-        private TextView productName, productPrice;
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        private final ImageButton removeProduct;
+        private final ImageView productImage;
+        private final TextView productName;
+        private final TextView productPrice;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             productImage= itemView.findViewById(R.id.cart_productImage);

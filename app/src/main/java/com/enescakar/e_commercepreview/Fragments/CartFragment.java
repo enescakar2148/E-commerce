@@ -1,5 +1,6 @@
 package com.enescakar.e_commercepreview.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -38,43 +39,40 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CartFragment extends Fragment {
 
-    private Context context;
+    private final Context context;
     private RecyclerView recyclerView;
-    private ArrayList<Product> products = new ArrayList<>();
+    private final ArrayList<Product> products = new ArrayList<>();
 
-    private final String BASE_URL = "https://fakestoreapi.com";
     private Retrofit retrofit;
 
-    private SQLiteDatabase sqliteDatabase;
-    private SQLManager sqlManager;
-
-    private ArrayList<Long> cartProductsFromDb;
+    private final SQLManager sqlManager;
 
     private long price = 0;
     private TextView totalPrice ;
+
     public CartFragment(Context context) {
         this.context = context;
 
-        sqliteDatabase= context.openOrCreateDatabase("Shopping", Context.MODE_PRIVATE, null);
+        SQLiteDatabase sqliteDatabase = context.openOrCreateDatabase("Shopping", Context.MODE_PRIVATE, null);
 
-        sqlManager = new SQLManager(context, sqliteDatabase);
+        sqlManager = new SQLManager(sqliteDatabase);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Sayfa daha oluşturulurken gerekli işlemlerin yapıldığı yer
 
-
+        //Ürün verilerinin çekilmesi için Gson ve Retrofitin oluşturulması
         Gson gson = new GsonBuilder().setLenient().create();
 
         //Retrofit Created
+        String BASE_URL = "https://fakestoreapi.com";
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 //JSON'u Parse etmesi için gerekli parser
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-
-
     }
 
     @Override
@@ -89,22 +87,25 @@ public class CartFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //init
         StoreAPI storeAPI = retrofit.create(StoreAPI.class);
-        cartProductsFromDb = sqlManager.getCart();
+        ArrayList<Long> cartProductsFromDb = sqlManager.getCart();
         totalPrice = view.findViewById(R.id.cart_totalPrice);
 
+        //eğer sepette ürün varsa
         if (cartProductsFromDb != null){
+            //sepeti getirmek için fonksiyon
             getProduct(cartProductsFromDb, storeAPI);
-
         } else {
             Toast.makeText(context, "Sepetinizde Ürün Yok :/", Toast.LENGTH_LONG).show();
         }
-        new CountDownTimer(1000, 1000){
 
+        //Ürün verilerinin İnternetten indirilmesi için biraz bekletiyoruz
+        new CountDownTimer(1000, 1000){
             @Override
             public void onTick(long millisUntilFinished) {
 
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onFinish() {
                 totalPrice.setText("Total Price : $" + price);
@@ -112,21 +113,25 @@ public class CartFragment extends Fragment {
                 RecyclerManager.bind(recyclerView, new CartRecyclerAdapter(context, products), new LinearLayoutManager(context));
             }
         }.start();
-
     }
 
+    //Ürünleri getir
+    //Sepete eklenen ürün ID'sine ait görsel ve diğer tüm verilerin internetten indirilmesi
     private void getProduct(ArrayList<Long> cartProductsFromDb, StoreAPI storeAPI){
+        //Sepetteki her ürün için
         for (long productId:cartProductsFromDb) {
+
             Call<Product> getProduct = storeAPI.getProduct(productId);
             getProduct.enqueue(new Callback<Product>() {
                 @Override
-                public void onResponse(Call<Product> call, Response<Product> response) {
+                public void onResponse(@NonNull Call<Product> call, @NonNull Response<Product> response) {
+                    assert response.body() != null;
                     products.add(response.body());
                     price = price+ (long) response.body().getPrice();
                 }
 
                 @Override
-                public void onFailure(Call<Product> call, Throwable t) {
+                public void onFailure(@NonNull Call<Product> call, @NonNull Throwable t) {
 
                 }
             });
